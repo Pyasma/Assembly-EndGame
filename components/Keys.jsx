@@ -1,4 +1,4 @@
-export function Key() {
+export function Key(props) {
   function getAlphabets() {
     const letters = [];
     for (let i = 0; i < 26; i++) {
@@ -10,7 +10,11 @@ export function Key() {
   return (
     <div className="alphabet-container">
       {letters.map((letter) => (
-        <button key={letter} className="alphabet-btn">
+        <button
+          onClick={() => props.newguess()}
+          key={letter}
+          className="alphabet-btn"
+        >
           {letter}
         </button>
       ))}
