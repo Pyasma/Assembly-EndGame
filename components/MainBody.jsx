@@ -19,15 +19,32 @@ const LANGUAGES = [
 export function MainBody() {
   const [word, setWord] = React.useState("apple");
   const [guessedletters, setguessedLetters] = React.useState([]);
-  console.log(guessedletters);
+  // console.log(guessedletters);
 
   function handleGuess(letter) {
+    // console.log("Attempting to guess:", letter);
     setguessedLetters((prevletters) => [...prevletters, letter]);
   }
   const startNewGame = () => {
     const random = WORDS[Math.floor(Math.random() * WORDS.length)];
     setWord(random);
+    setguessedLetters([]);
   };
+
+  function getBtnColor(letter, guessedletters, word) {
+    // First: Has this letter been guessed?
+    const hasBeenGuessed = guessedletters.includes(letter);
+
+    if (!hasBeenGuessed) {
+      return "gold"; // Not guessed yet, keep default color
+    }
+    // Second: If guessed, is it in the word?
+    if (word.toUpperCase().includes(letter)) {
+      return "green"; // Correct guess
+    } else {
+      return "red"; // Wrong guess
+    }
+  }
 
   return (
     <div>
@@ -43,7 +60,13 @@ export function MainBody() {
         ))}
       </div>
       <GuessGame word={word} />
-      <Key onGuess={handleGuess} />
+      <Key
+        onGuess={handleGuess}
+        guessedletters={guessedletters}
+        word={word}
+        getBtnColor={getBtnColor}
+      />
+
       <NewGame onNewGame={startNewGame} />
     </div>
   );
