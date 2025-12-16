@@ -89,12 +89,13 @@ export function MainBody() {
           );
         })}
       </div>
-      <GuessGame
-        isGameOver={isGameOver}
-        word={word}
+      <GuessGame word={word} guessedletters={guessedletters} />
+      <Key
+        onGuess={handleGuess}
         guessedletters={guessedletters}
+        word={word}
+        isGameOver={isGameOver}
       />
-      <Key onGuess={handleGuess} guessedletters={guessedletters} word={word} />
 
       <NewGame onNewGame={startNewGame} />
     </div>
