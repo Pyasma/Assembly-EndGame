@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Key(props) {
+export function Key({ onGuess, guessedletters, word, getBtnColor }) {
   function getAlphabets() {
     const letters = [];
     for (let i = 0; i < 26; i++) {
@@ -18,8 +18,8 @@ export function Key(props) {
       // console.log("Key pressed:", key);
       // Check if the pressed key is a letter (A-Z)
       if (key.length === 1 && key >= "A" && key <= "Z") {
-        if (typeof props.onGuess === "function") {
-          props.onGuess(key);
+        if (typeof onGuess === "function") {
+          onGuess(key);
         }
       }
     }
@@ -30,7 +30,7 @@ export function Key(props) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [props.onGuess]);
+  }, [onGuess]);
 
   return (
     <div className="alphabet-container">
@@ -38,18 +38,14 @@ export function Key(props) {
         <button
           onClick={() => {
             // console.log("Key clicked:", letter);
-            if (typeof props.onGuess === "function") {
-              props.onGuess(letter);
+            if (typeof onGuess === "function") {
+              onGuess(letter);
             }
           }}
           key={letter}
           className="alphabet-btn"
           style={{
-            backgroundColor: props.getBtnColor(
-              letter,
-              props.guessedletters,
-              props.word,
-            ),
+            backgroundColor: getBtnColor(letter, guessedletters, word),
           }}
         >
           {letter}
