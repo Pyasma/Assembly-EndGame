@@ -2,6 +2,7 @@ import React from "react";
 import { GuessGame } from "./GuessGame.jsx";
 import { NewGame } from "./NewGame.jsx";
 import { Key } from "../components/Keys.jsx";
+import { Status } from "../components/Status.jsx";
 
 const WORDS = ["apple", "grape", "mango", "peach"];
 const LANGUAGES = [
@@ -19,11 +20,15 @@ const LANGUAGES = [
 export function MainBody() {
   const [word, setWord] = React.useState("apple");
   const [guessedletters, setguessedLetters] = React.useState([]);
-  // console.log(guessedletters);
+  console.log(guessedletters);
 
   function handleGuess(letter) {
     // console.log("Attempting to guess:", letter);
-    setguessedLetters((prevletters) => [...prevletters, letter]);
+    setguessedLetters((prevletters) => {
+      const letterSet = new Set(prevletters);
+      letterSet.add(letter);
+      return Array.from(letterSet);
+    });
   }
   const startNewGame = () => {
     const random = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -31,41 +36,65 @@ export function MainBody() {
     setguessedLetters([]);
   };
 
-  function getBtnColor(letter, guessedletters, word) {
-    // First: Has this letter been guessed?
-    const hasBeenGuessed = guessedletters.includes(letter);
+  // Count wrong guesses (letters guessed that are NOT in the word)
+  const wrongGuesses = guessedletters.filter(
+    (letter) => !word.toUpperCase().includes(letter),
+  );
+  const wrongGuessCount = wrongGuesses.length;
 
-    if (!hasBeenGuessed) {
-      return "gold"; // Not guessed yet, keep default color
-    }
-    // Second: If guessed, is it in the word?
-    if (word.toUpperCase().includes(letter)) {
-      return "green"; // Correct guess
-    } else {
-      return "red"; // Wrong guess
-    }
-  }
+  // Check if all letters in the word have been guessed
+  const wordLetters = word.toUpperCase().split("");
+  const isWinner = wordLetters.every((letter) =>
+    guessedletters.includes(letter),
+  );
+
+  // Lose condition: 5 wrong guesses
+  const isLoser = wrongGuessCount >= 9;
+
+  // Game is over if won or lost
+  const isGameOver = isWinner || isLoser;
 
   return (
     <div>
-      <div className="hero">
-        {LANGUAGES.map((lang) => (
-          <p
-            key={lang.name}
-            className="body-html"
-            style={{ backgroundColor: lang.color, color: lang.text }}
-          >
-            {lang.name}
-          </p>
+      {isGameOver &&
+        (isWinner ? (
+          <Status
+            message="You win!"
+            description="Well done! 🎉 Press New Game to play again."
+            style={{ color: "white", backgroundColor: "green" }}
+          />
+        ) : (
+          <Status
+            message="You lose!"
+            description="Better luck next time! Press New Game to try again."
+            style={{ color: "white", backgroundColor: "red" }}
+          />
         ))}
+      <div className="hero">
+        {LANGUAGES.map((lang, index) => {
+          const isLost = index < wrongGuessCount;
+          return (
+            <p
+              key={lang.name}
+              className="body-html"
+              style={{
+                backgroundColor: lang.color,
+                color: lang.text,
+                textDecoration: isLost ? "line-through" : "none",
+                opacity: isLost ? 0.5 : 1,
+              }}
+            >
+              {lang.name}
+            </p>
+          );
+        })}
       </div>
-      <GuessGame word={word} />
-      <Key
-        onGuess={handleGuess}
-        guessedletters={guessedletters}
+      <GuessGame
+        isGameOver={isGameOver}
         word={word}
-        getBtnColor={getBtnColor}
+        guessedletters={guessedletters}
       />
+      <Key onGuess={handleGuess} guessedletters={guessedletters} word={word} />
 
       <NewGame onNewGame={startNewGame} />
     </div>

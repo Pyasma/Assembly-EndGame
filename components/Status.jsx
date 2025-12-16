@@ -1,8 +1,8 @@
-export function Status() {
+export function Status(props) {
   return (
-    <section className="status-box">
-      <h2>You win!</h2>
-      <p>Well done! 🎉</p>
+    <section className="status-box" style={props.style}>
+      <h2>{props.message}</h2>
+      <p>{props.description}</p>
     </section>
   );
 }

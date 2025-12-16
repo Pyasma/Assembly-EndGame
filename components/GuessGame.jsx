@@ -1,10 +1,14 @@
-export function GuessGame(props) {
-  console.log("GuessGame props:", props);
+export function GuessGame({ word, guessedletters }) {
+  const letters = word.split("").map((letter, index) => {
+    const upperLetter = letter.toUpperCase();
+    const isGuessed = guessedletters.includes(upperLetter);
 
-  const letters = props.word.split("").map((letter, index) => (
-    <span key={index} className="letter">
-      {letter.toUpperCase()}
-    </span>
-  ));
+    return (
+      <span key={index} className="letter">
+        {isGuessed ? upperLetter : ""}
+      </span>
+    );
+  });
+
   return <section className="word">{letters}</section>;
 }
