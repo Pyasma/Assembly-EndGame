@@ -49,7 +49,7 @@ export function MainBody() {
   );
 
   // Lose condition: 5 wrong guesses
-  const isLoser = wrongGuessCount >= 9;
+  const isLoser = wrongGuessCount >= 8;
 
   // Game is over if won or lost
   const isGameOver = isWinner || isLoser;
