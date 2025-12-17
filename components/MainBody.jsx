@@ -3,8 +3,10 @@ import { GuessGame } from "./GuessGame.jsx";
 import { NewGame } from "./NewGame.jsx";
 import { Key } from "../components/Keys.jsx";
 import { Status } from "../components/Status.jsx";
+import { getFarewellMessage } from "../utils/farewell.js";
+import { getRandomWord } from "../utils/words.js";
+import confetti from "canvas-confetti";
 
-const WORDS = ["apple", "grape", "mango", "peach"];
 const LANGUAGES = [
   { name: "HTML", color: "orange", text: "black" },
   { name: "CSS", color: "blue", text: "white" },
@@ -18,9 +20,9 @@ const LANGUAGES = [
 ];
 
 export function MainBody() {
-  const [word, setWord] = React.useState("apple");
+  const [word, setWord] = React.useState(() => getRandomWord());
   const [guessedletters, setguessedLetters] = React.useState([]);
-  console.log(guessedletters);
+  // console.log(guessedletters);
 
   function handleGuess(letter) {
     // console.log("Attempting to guess:", letter);
@@ -31,8 +33,7 @@ export function MainBody() {
     });
   }
   const startNewGame = () => {
-    const random = WORDS[Math.floor(Math.random() * WORDS.length)];
-    setWord(random);
+    setWord(getRandomWord());
     setguessedLetters([]);
   };
 
@@ -48,14 +49,40 @@ export function MainBody() {
     guessedletters.includes(letter),
   );
 
-  // Lose condition: 5 wrong guesses
+  // Lose condition: 8 wrong guesses (assuming this is the current condition based on original code)
   const isLoser = wrongGuessCount >= 8;
 
   // Game is over if won or lost
   const isGameOver = isWinner || isLoser;
 
+  // Custom logic for lost languages when the player loses
+  // Get the last lost language for the farewell message
+  const lastLostLanguage =
+    wrongGuessCount > 0 ? LANGUAGES[wrongGuessCount - 1]?.name : "Assembly";
+
+  const justLostLanguage = wrongGuessCount > 0 && !isGameOver;
+  const loseDescription = getFarewellMessage(lastLostLanguage);
+  React.useEffect(() => {
+    if (isWinner) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    }
+  }, [isWinner]);
+
   return (
     <div>
+      {/* Show farewell message when a language is lost (but game not over yet) */}
+      {justLostLanguage && lastLostLanguage && (
+        <Status
+          message="You lose! 💀"
+          description={getFarewellMessage(lastLostLanguage)}
+          style={{ color: "white", backgroundColor: "purple" }}
+        />
+      )}
+
       {isGameOver &&
         (isWinner ? (
           <Status
@@ -66,10 +93,11 @@ export function MainBody() {
         ) : (
           <Status
             message="You lose!"
-            description="Better luck next time! Press New Game to try again."
+            description={loseDescription} // Use the custom loseDescription here
             style={{ color: "white", backgroundColor: "red" }}
           />
         ))}
+
       <div className="hero">
         {LANGUAGES.map((lang, index) => {
           const isLost = index < wrongGuessCount;
@@ -89,7 +117,11 @@ export function MainBody() {
           );
         })}
       </div>
-      <GuessGame word={word} guessedletters={guessedletters} />
+      <GuessGame
+        word={word}
+        guessedletters={guessedletters}
+        isLoser={isLoser}
+      />
       <Key
         onGuess={handleGuess}
         guessedletters={guessedletters}
@@ -97,7 +129,7 @@ export function MainBody() {
         isGameOver={isGameOver}
       />
 
-      <NewGame onNewGame={startNewGame} />
+      {isGameOver && <NewGame onNewGame={startNewGame} />}
     </div>
   );
 }
