@@ -1,16 +1,79 @@
-# React + Vite
+# Assembly-EndGame
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Description
 
-Currently, two official plugins are available:
+Assembly-EndGame is an interactive web-based game built with React and Vite. It appears to be a word-guessing game, potentially with a theme related to "Assembly," suggesting a unique twist that might involve low-level programming concepts or a specific subject area. The application leverages components like `GuessGame` for core gameplay, `InputsAss` for handling user input, `Status` for displaying game information, and `NewGame` for restarting rounds. Visual feedback, including celebratory effects powered by `canvas-confetti`, enhances the user experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
 
-## React Compiler
+*   **React:** A JavaScript library for building user interfaces.
+*   **Vite:** A fast build tool that provides a lightning-fast development experience for modern web projects.
+*   **pnpm:** A fast, disk space efficient package manager.
+*   **canvas-confetti:** For interactive and celebratory visual effects.
+*   **clsx:** A tiny utility for constructing `className` strings conditionally.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the ESLint configuration
+### Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+*   Node.js (LTS version recommended)
+*   pnpm (You can install it globally via `npm install -g pnpm`)
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/Assembly-EndGame.git
+    cd Assembly-EndGame
+    ```
+    *(Note: Replace `https://github.com/your-username/Assembly-EndGame.git` with the actual repository URL if it exists.)*
+
+2.  Install dependencies:
+    ```bash
+    pnpm install
+    ```
+
+### Running the Development Server
+
+To start the development server with hot module replacement:
+
+```bash
+pnpm run dev
+```
+
+Open your browser to the address indicated in the terminal (usually `http://localhost:5173`).
+
+### Building for Production
+
+To build the application for production:
+
+```bash
+pnpm run build
+```
+
+This will generate a `dist` folder with the optimized production build.
+
+### Previewing the Production Build
+
+You can preview the production build locally:
+
+```bash
+pnpm run preview
+```
+
+## Available Scripts
+
+In the project directory, you can run:
+
+*   `pnpm run dev`: Starts the development server.
+*   `pnpm run build`: Builds the app for production.
+*   `pnpm run lint`: Runs ESLint to check for code quality issues.
+*   `pnpm run preview`: Serves the production build locally.
+
+## Contribution
+
+If you'd like to contribute, please fork the repository and create a pull request with your changes.
+
+## License
+
+*(Add license information here if applicable, e.g., MIT License)*
